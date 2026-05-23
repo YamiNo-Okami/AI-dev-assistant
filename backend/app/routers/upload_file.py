@@ -1,6 +1,7 @@
 from fastapi import UploadFile, APIRouter, HTTPException, status
 import mimetypes
 
+from app.utils.upload_config import ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES, BLOCKED_EXTENSIONS
 from app.utils.file_validator import validate_file
 from app.utils.upload_config import max_file_size
 
@@ -12,7 +13,10 @@ router = APIRouter(
 @router.get('/')
 def index_upload():
     return {
-        "message": "upload file endpoint"
+        "max_file_size_MB": f"{ max_file_size / (1024 * 1024):.2f} MB",
+        "blocked_extensions": BLOCKED_EXTENSIONS,
+        "allowed_extensions": ALLOWED_EXTENSIONS,
+        "allowed_mime_types": ALLOWED_MIME_TYPES
     }
 
 
