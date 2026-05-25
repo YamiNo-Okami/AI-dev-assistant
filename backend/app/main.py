@@ -89,6 +89,7 @@ async def add_process_time_header(request: Request, call_next):
         "/debugging/",
         "/suggestions/",
         "/analyze/",
+        "/analyze/zip/",
     ):
         remaining = check_rate_limit(ip)
         if remaining < 0:
@@ -147,6 +148,7 @@ async def root():
             "/debugging/",
             "/suggestions/",
             "/analyze/",
+            "/analyze/zip/",
             "/share/",
         ],
     }
@@ -163,6 +165,7 @@ async def health_check():
             "/debugging/",
             "/suggestions/",
             "/analyze/",
+            "/analyze/zip/",
             "/share/",
         ],
     }
