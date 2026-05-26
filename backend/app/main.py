@@ -13,7 +13,7 @@ import os
 from collections import defaultdict
 from contextlib import asynccontextmanager
 
-from .routers import explanation, debugging, suggestions, analyze, subscribe, upload_file
+from .routers import  upload_file
 
 from .routers import explanation, debugging, suggestions, analyze, subscribe, share
 from .services.scheduler import start_scheduler, stop_scheduler
