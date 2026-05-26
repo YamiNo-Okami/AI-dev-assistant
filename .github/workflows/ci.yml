@@ -29,8 +29,8 @@ jobs:
       - name: Ensure libmagic is installed
         run: |
           if ! dpkg -s libmagic1 >/dev/null 2>&1; then
-            apt-get update
-            apt-get install -y libmagic1 libmagic-dev
+            sudo apt-get update
+            sudo apt-get install -y libmagic1 libmagic-dev
           else
             echo "libmagic already installed"
           fi
