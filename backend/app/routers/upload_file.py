@@ -27,16 +27,11 @@ async def upload_file(file: UploadFile):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="No file uploaded"
         )
-    
-    
-
     filename = file.filename
     # print(filetype)
-    
-    
     filecontent = await file.read()
     # print(filecontent)
-    filesize = len(filecontent) 
+    filesize = len(filecontent)
 
     # Validate max size
     if filesize > max_file_size:
