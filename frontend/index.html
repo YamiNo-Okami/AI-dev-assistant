@@ -2361,10 +2361,10 @@
           <p style="margin:0 0 6px;font-size:0.8rem;font-weight:600;color:var(--accent);">Weekly Digest</p>
           <form id="digestForm" style="display:flex;gap:6px;">
             <input type="email" id="digestEmail" placeholder="your@email.com" required
-                   style="flex:1;min-width:180px;padding:7px 10px;font-size:0.8rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--fg);">
+                   style="flex:1;min-width:180px;padding:7px 10px;font-size:0.8rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);">
             <button type="submit" id="digestBtn" style="padding:7px 14px;font-size:0.8rem;font-weight:600;background:var(--accent);color:#fff;border:none;border-radius:6px;cursor:pointer;">Subscribe</button>
           </form>
-          <p style="margin:6px 0 0;font-size:0.7rem;color:var(--muted);">Get a Sunday email with your weekly analysis stats.</p>
+          <p style="margin:6px 0 0;font-size:0.7rem;color:var(--text3);">Get a Sunday email with your weekly analysis stats.</p>
         </div>
       </div>
     </footer>
@@ -2921,6 +2921,11 @@
         return ((apiUrlInput && apiUrlInput.value) || localStorage.getItem('qyx_apiUrl') || 'http://localhost:8000').replace(/\/$/, '');
       }
 
+      function isNetworkFetchFailure(err) {
+        const message = String(err?.message || err || '');
+        return err?.name === 'TypeError' && /fetch/i.test(message);
+      }
+
       function normalizeEditorOnLoad() {
         if (looksLikeRestoredPageSource(editor.value || '')) {
           editor.value = '';
@@ -3320,7 +3325,15 @@
           resultActions.style.display = 'flex';
 
         } catch (err) {
-          toast(getTranslation('toast_analysis_failed').replace('{message}', err.message), 'error');
+          if (isNetworkFetchFailure(err)) {
+            apiDot?.classList.remove('connected');
+            apiStatusText.dataset.status = 'unreachable';
+            delete apiStatusText.dataset.statusCode;
+            syncApiStatusText();
+            toast(getTranslation('toast_api_unreachable'), 'error');
+          } else {
+            toast(getTranslation('toast_analysis_failed').replace('{message}', err.message), 'error');
+          }
           resetResults();
         } finally {
           analyzeBtn.classList.remove('loading');
